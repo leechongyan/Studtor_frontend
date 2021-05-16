@@ -3,15 +3,17 @@ import { Switch } from 'react-router-dom'
 
 import PublicRoute from 'components/PublicRoute'
 import { ROUTES } from 'constants/routes'
+import LoginPage from 'screens/LoginPage'
 
 export const AppRouter: FC = () => {
   return (
     <Switch>
       <PublicRoute exact path={ROUTES.LOGIN}>
-        {/* <LoginPage /> */}
+        <LoginPage />
       </PublicRoute>
       <PublicRoute path={ROUTES.ROOT}>
-        <MainPage />
+        {/* TODO: add MainPage after LoginPage */}
+        {/* <MainPage /> */}
       </PublicRoute>
     </Switch>
   )
