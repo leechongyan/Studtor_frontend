@@ -5,7 +5,7 @@ import { ROUTES } from 'constants/routes'
 
 // TODO: replace this with an actual hook once BE is done
 const useAuth = () => ({
-  token: 'TODO',
+  token: '',
 })
 
 export interface PublicRouteProps extends RouteProps {
@@ -34,7 +34,7 @@ export const PublicRoute = ({
         !!token && restricted ? (
           <Redirect
             to={{
-              pathname: ROUTES.ROOT,
+              pathname: ROUTES.HOME,
               state: { from: location },
             }}
           />
