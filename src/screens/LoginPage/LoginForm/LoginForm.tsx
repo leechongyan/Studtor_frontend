@@ -12,34 +12,41 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 
-import PasswordInput from 'components/PasswordInput'
 import { ROUTES } from 'constants/routes'
 
 interface FormData {
-  username: string
-  password: string
+  email: string
 }
 
-export const LoginForm = (): JSX.Element => {
+const useAuth = () => ({
+  submitOtp: (_formData: FormData) => ({}),
+  verifyOtp: (_: string) => Promise.resolve(true),
+})
+
+interface LoginFormProps {
+  onLogin: () => void
+}
+
+export const LoginForm = ({ onLogin }: LoginFormProps): JSX.Element => {
   const { register, handleSubmit } = useForm<FormData>()
   // TODO: hook this into AuthContext once backend is set up
-  const onSubmit = (data: FormData) => console.log(data)
+  const { submitOtp } = useAuth()
+  const onSubmit = (formData: FormData) => {
+    submitOtp(formData)
+    onLogin()
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex alignItems="flex-start" flexDirection="column" as={VStack}>
         <Heading>Login</Heading>
         <FormControl isRequired>
-          <FormLabel>Username</FormLabel>
+          <FormLabel>Email</FormLabel>
           <Input
-            {...register('username')}
+            {...register('email')}
             isRequired
-            placeholder="Enter your username"
+            placeholder="Enter your email"
           />
-        </FormControl>
-        <FormControl isRequired>
-          <FormLabel>Password</FormLabel>
-          <PasswordInput {...register('password')} />
         </FormControl>
         <HStack>
           <Button type="submit">Login</Button>
