@@ -27,8 +27,7 @@
         "plugins": [
           "@typescript-eslint",
           "import",
-          "simple-import-sort",
-          "typesafe"
+          "simple-import-sort"
         ],
         "extends": ["plugin:@typescript-eslint/recommended"],
         "rules": {

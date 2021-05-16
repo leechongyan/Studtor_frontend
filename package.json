@@ -13,11 +13,16 @@
     "@types/node": "^12.20.13",
     "@types/react": "^16.14.6",
     "@types/react-dom": "^16.9.13",
+    "axios": "^0.21.1",
+    "camelcase-keys": "^6.2.2",
     "framer-motion": "^4.1.16",
+    "neverthrow": "^4.2.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^3.11.0",
+    "react-query": "^3.16.0",
     "react-scripts": "4.0.3",
+    "snakecase-keys": "^4.0.2",
     "typescript": "^3.9.9",
     "web-vitals": "^0.2.4"
   },
@@ -41,5 +46,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint": "^7.26.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "prettier": "2.3.0"
   }
 }
