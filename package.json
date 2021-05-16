@@ -15,6 +15,7 @@
     "@types/react-dom": "^16.9.13",
     "axios": "^0.21.1",
     "camelcase-keys": "^6.2.2",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
     "framer-motion": "^4.1.16",
     "neverthrow": "^4.2.1",
     "react": "^17.0.2",
