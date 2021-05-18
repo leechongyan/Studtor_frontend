@@ -10,31 +10,24 @@ import {
 } from '@chakra-ui/react'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
 
-import { ROUTES } from 'constants/routes'
+import { useAuth } from 'contexts/AuthContext'
+import { LoginDetails } from 'typings'
 
-interface FormData {
-  email: string
-}
-
-const useAuth = () => ({
-  submitOtp: (_formData: FormData) => ({}),
-  verifyOtp: (_: string) => Promise.resolve(true),
-})
+import { PasswordInput } from '../../../components/PasswordInput/PasswordInput'
 
 interface LoginFormProps {
-  onLogin: () => void
+  onLogin: (loginDetails: LoginDetails) => Promise<void>
+  onClickSignUp: () => void
 }
 
-export const LoginForm = ({ onLogin }: LoginFormProps): JSX.Element => {
+export const LoginForm = ({
+  onLogin,
+  onClickSignUp,
+}: LoginFormProps): JSX.Element => {
   const { register, handleSubmit } = useForm<FormData>()
   // TODO: hook this into AuthContext once backend is set up
-  const { submitOtp } = useAuth()
-  const onSubmit = (formData: FormData) => {
-    submitOtp(formData)
-    onLogin()
-  }
+  const onSubmit = (formData: LoginDetails) => onLogin(formData)
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -48,11 +41,17 @@ export const LoginForm = ({ onLogin }: LoginFormProps): JSX.Element => {
             placeholder="Enter your email"
           />
         </FormControl>
+        <FormControl isRequired>
+          <FormLabel>Password</FormLabel>
+          <PasswordInput
+            {...register('password')}
+            isRequired
+            placeholder="Enter your password"
+          />
+        </FormControl>
         <HStack>
           <Button type="submit">Login</Button>
-          <Button as={Link} to={ROUTES.SIGNUP}>
-            Sign up
-          </Button>
+          <Button onClick={onClickSignUp}>Sign up</Button>
         </HStack>
       </Flex>
     </form>
