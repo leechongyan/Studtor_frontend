@@ -1,9 +1,9 @@
+import { QueryOptions } from 'react-query'
+
 import axios, { AxiosError, AxiosTransformer } from 'axios'
 import camelcaseKeys from 'camelcase-keys'
-import { QueryOptions } from 'react-query'
-import snakecaseKeys from 'snakecase-keys'
-
 import { TOKEN_KEY } from 'constants/localStorage'
+import snakecaseKeys from 'snakecase-keys'
 
 const API_BASE_URL = process.env.REACT_APP_BASE_URL ?? '/api/v1'
 
