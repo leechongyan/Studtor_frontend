@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Switch } from 'react-router-dom'
+import { Redirect, Switch } from 'react-router-dom'
 
 import PublicRoute from 'components/PublicRoute'
 import { ROUTES } from 'constants/routes'
@@ -13,7 +13,7 @@ export const AppRouter: FC = () => {
       </PublicRoute>
       <PublicRoute path={ROUTES.ROOT}>
         {/* TODO: add MainPage after LoginPage */}
-        {/* <MainPage /> */}
+        <Redirect to={ROUTES.LOGIN} />
       </PublicRoute>
     </Switch>
   )
