@@ -11,7 +11,6 @@ import {
 import React from 'react'
 import { useForm } from 'react-hook-form'
 
-import { useAuth } from 'contexts/AuthContext'
 import { LoginDetails } from 'typings'
 
 import { PasswordInput } from '../../../components/PasswordInput/PasswordInput'

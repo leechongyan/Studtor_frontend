@@ -2,11 +2,11 @@ import React, { createContext, FC, useContext, useState } from 'react'
 import { useMutation } from 'react-query'
 
 import { ApiService } from 'services/ApiService'
-import { JwtToken, SignupDto, User, UserDto } from 'typings'
+import { JwtToken, SignupDto, User } from 'typings'
 
 import { TOKEN_KEY } from '../constants/localStorage'
 import { useLocalStorage } from '../hooks/useLocalStorage'
-import { ErrorDto, LoginDetails, VerificationDto } from '../typings'
+import { ErrorDto, LoginDetails } from '../typings'
 
 // Consumers of the context will have access to these
 interface AuthContextProps {
@@ -41,43 +41,36 @@ export const AuthProvider: FC = ({ children }) => {
   const [token, setToken] = useLocalStorage<JwtToken>(TOKEN_KEY)
   const [email, setEmail] = useState<string>()
 
-  const { error: isSendOtpError, mutateAsync: sendOtp } = useMutation<
-    string,
-    ErrorDto,
-    SignupDto
-  >((signupDetails) =>
-    ApiService.post<string>('/signup', signupDetails).then(({ data }) => {
-      setEmail(signupDetails.email)
-      return data
-    }),
+  const { mutateAsync: sendOtp } = useMutation<string, ErrorDto, SignupDto>(
+    (signupDetails) =>
+      ApiService.post<string>('/signup', signupDetails).then(({ data }) => {
+        setEmail(signupDetails.email)
+        return data
+      }),
   )
 
-  const { error: isVerificationError, mutateAsync: verifyOtp } = useMutation<
-    boolean,
-    ErrorDto,
-    string
-  >((otp) => {
-    return ApiService.post<boolean>('/verify', {
-      email,
-      verification_key: otp,
-    }).then(({ data }) => data)
-  })
-
-  const {
-    data: loginResponse,
-    error: isLoginError,
-    mutateAsync: login,
-  } = useMutation<{ token: JwtToken }, ErrorDto, LoginDetails>(
-    (loginDetails) => {
-      setEmail(loginDetails.email)
-      return ApiService.post<{ token: JwtToken }>('/login', loginDetails).then(
-        ({ data }) => {
-          setToken(data.token)
-          return data
-        },
-      )
+  const { mutateAsync: verifyOtp } = useMutation<boolean, ErrorDto, string>(
+    (otp) => {
+      return ApiService.post<boolean>('/verify', {
+        email,
+        verification_key: otp,
+      }).then(({ data }) => data)
     },
   )
+
+  const { mutateAsync: login } = useMutation<
+    { token: JwtToken },
+    ErrorDto,
+    LoginDetails
+  >((loginDetails) => {
+    setEmail(loginDetails.email)
+    return ApiService.post<{ token: JwtToken }>('/login', loginDetails).then(
+      ({ data }) => {
+        setToken(data.token)
+        return data
+      },
+    )
+  })
 
   // TODO: ping backend
   const logout = () => {
