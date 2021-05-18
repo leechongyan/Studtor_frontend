@@ -1,10 +1,14 @@
-import { Box, HStack, Image, VStack } from '@chakra-ui/react'
+import { Box, HStack, Image, useToast, VStack } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useHistory } from 'react-router'
 
-import LoginLogo from 'assets/login.svg'
+import loginLogo from 'assets/login.svg'
+import axios from 'axios'
 import { useAuth } from 'contexts/AuthContext'
+import { ResultAsync } from 'neverthrow'
 import { LoginDetails } from 'typings'
+
+import { createToastFromAxiosError } from '../../utils/api'
 
 import LoginForm from './LoginForm'
 import OtpForm from './OtpForm'
@@ -12,13 +16,14 @@ import OtpForm from './OtpForm'
 // TODO: add type to model state
 export const LoginPage = (): JSX.Element => {
   const [isLogin, setIsLogin] = useState(true)
+  const toast = useToast()
   const { login } = useAuth()
   const history = useHistory()
 
   return (
     <Box>
       <HStack>
-        <Image src={LoginLogo} />
+        <Image src={loginLogo} />
         <Box pl="24" borderRadius="8">
           {/* TODO: Find a nice colour and style it so it looks cool */}
           <VStack>
@@ -26,11 +31,19 @@ export const LoginPage = (): JSX.Element => {
               {isLogin ? (
                 <LoginForm
                   onLogin={async (loginDetails: LoginDetails) => {
-                    const token = await login(loginDetails)
-                    // Redirect to homepage if the token is valid
-                    if (!!token) {
-                      history.push('/home')
-                    }
+                    ResultAsync.fromPromise(login(loginDetails), (error) => {
+                      if (axios.isAxiosError(error)) {
+                        toast(createToastFromAxiosError(error))
+                      } else {
+                        toast({
+                          title:
+                            'Something went wrong. Please refresh and try again',
+                        })
+                      }
+                    })
+                      .map(() => history.push('/home'))
+                      // ! TODO: Remove when FE confirms typings
+                      .mapErr(() => history.push('/home'))
                   }}
                   onClickSignUp={() => setIsLogin(false)}
                 />

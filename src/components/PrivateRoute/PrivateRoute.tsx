@@ -2,11 +2,7 @@ import React from 'react'
 import { Redirect, Route, RouteProps } from 'react-router-dom'
 
 import { ROUTES } from 'constants/routes'
-
-// TODO: replace this with an actual hook once BE is done
-const useAuth = () => ({
-  token: 'TODO',
-})
+import { useAuth } from 'contexts/AuthContext'
 
 export const PrivateRoute = ({
   children,
