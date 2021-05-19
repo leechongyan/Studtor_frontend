@@ -2,18 +2,20 @@ import { QueryObserverResult, RefetchOptions, useQuery } from 'react-query'
 
 import * as CourseService from 'services/CourseService'
 
+import { Course } from '../typings/course'
+
 interface HookValues {
-  courses: Array<string>
+  courses: Array<Course>
   fetchAllCourses: (
     options?: RefetchOptions | undefined,
-  ) => Promise<QueryObserverResult<string[], Error>>
+  ) => Promise<QueryObserverResult<Course[], Error>>
 }
 
 export const useCourses = (): HookValues => {
   const { data: courses, refetch: fetchAllCourses } = useQuery<
-    Array<string>,
+    Array<Course>,
     Error,
-    Array<string>,
+    Array<Course>,
     string
   >('fetchAllCourses', CourseService.getAllCourses, {
     initialData: [],
