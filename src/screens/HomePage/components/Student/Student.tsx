@@ -8,7 +8,7 @@ import { useSearch } from 'contexts/SearchContext'
 import { Course } from 'typings/course'
 
 import { findMatchedCourses } from '../../utils'
-import { CourseTable } from '../CourseTable/CourseTable'
+import CourseTable from '../CourseTable'
 import ListDisplayModal from '../ListDisplayModal'
 
 interface StudentProps {
