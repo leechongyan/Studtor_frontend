@@ -7,39 +7,28 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
+  ModalProps,
 } from '@chakra-ui/react'
-import React from 'react'
-
-import _ from 'lodash'
-
-// Exported for use by other components
-export interface ModalProps<T> {
-  data: Array<T>
-  title: string
-  isOpen: boolean
-  onClose: () => void
-  onClick: () => void
-}
+import React, { ReactChild } from 'react'
 
 export const ListDisplayModal = ({
-  data,
   title,
   isOpen,
   onClose,
-  onClick,
-}: ModalProps<string>): JSX.Element => {
+  children,
+}: ModalProps<never> & { children: ReactChild }): JSX.Element => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      closeOnOverlayClick={false}
+      size="lg"
+    >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{title}</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
-          {_(data).map((item) => (
-            <Text onClick={onClick}>{item}</Text>
-          ))}
-        </ModalBody>
+        <ModalBody>{children}</ModalBody>
         <ModalFooter>
           <Button colorScheme="blue" mr={3} onClick={onClose}>
             Close
