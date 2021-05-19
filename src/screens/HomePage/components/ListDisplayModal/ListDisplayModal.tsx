@@ -7,9 +7,10 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  ModalProps,
 } from '@chakra-ui/react'
 import React, { ReactChild } from 'react'
+
+import { ModalProps } from 'typings/components'
 
 export const ListDisplayModal = ({
   title,
@@ -33,7 +34,6 @@ export const ListDisplayModal = ({
           <Button colorScheme="blue" mr={3} onClick={onClose}>
             Close
           </Button>
-          <Button variant="ghost">Secondary Action</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
