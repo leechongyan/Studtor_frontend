@@ -1,9 +1,30 @@
+import { Course } from '../typings/course'
+
 import { ApiService } from './ApiService'
 
 const COURSES_ENDPOINT = 'courses'
-const MOCK_COURSES = ['CZ1001', 'CZ2001']
+const MOCK_COURSES: Course[] = [
+  {
+    courseCode: 'CZ3001',
+    courseTitle: 'HCI',
+    numStudents: 0,
+    numTutors: 1,
+  },
+  {
+    courseCode: 'LB1423',
+    courseTitle: 'wad',
+    numStudents: 3,
+    numTutors: 1,
+  },
+  {
+    courseCode: 'MH9823',
+    courseTitle: 'meth and math',
+    numStudents: 40,
+    numTutors: 1,
+  },
+]
 
-export const getAllCourses = (): Promise<string[]> => {
+export const getAllCourses = (): Promise<Course[]> => {
   return ApiService.post(COURSES_ENDPOINT)
     .then(({ data }) => data)
     .catch(() => MOCK_COURSES)
