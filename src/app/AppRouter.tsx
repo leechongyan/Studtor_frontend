@@ -13,10 +13,9 @@ export const AppRouter: FC = () => {
       <PublicRoute exact path={ROUTES.LOGIN}>
         <LoginPage />
       </PublicRoute>
-      <PublicRoute exact path={ROUTES.HOME}>
+      <PrivateRoute exact path={ROUTES.HOME}>
         <HomePage />
-      </PublicRoute>
-      <PrivateRoute exact path={ROUTES.HOME} />
+      </PrivateRoute>
       <PublicRoute path={ROUTES.ROOT}>
         {/* TODO: add MainPage after LoginPage */}
         <Redirect to={ROUTES.LOGIN} />

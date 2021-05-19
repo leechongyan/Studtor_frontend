@@ -2,11 +2,7 @@ import React from 'react'
 import { Redirect, Route, RouteProps } from 'react-router-dom'
 
 import { ROUTES } from 'constants/routes'
-
-// TODO: replace this with an actual hook once BE is done
-const useAuth = () => ({
-  token: '',
-})
+import { useAuth } from 'contexts/AuthContext'
 
 export interface PublicRouteProps extends RouteProps {
   // If restricted is true, only non-authed users can access the route.
