@@ -1,15 +1,32 @@
-import { Box, Image, Tooltip, useDisclosure } from '@chakra-ui/react'
-import React from 'react'
+import { Box, Image, Input, Tooltip, useDisclosure } from '@chakra-ui/react'
+import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 
 import teacherLogo from 'assets/teacher.svg'
+import { ROUTES } from 'constants/routes'
+import { useSearch } from 'contexts/SearchContext'
+import { findMatchedCourses } from 'screens/HomePage/utils'
 
+import { Course } from '../../../../typings/course'
+import { CourseTable } from '../CourseTable/CourseTable'
 import ListDisplayModal from '../ListDisplayModal'
-import { ModalProps } from '../ListDisplayModal/ListDisplayModal'
 
-type TeacherProps = Pick<ModalProps<string>, 'data' | 'onClick'>
+interface TeacherProps {
+  data: Course[]
+}
 
-export const Teacher = ({ data, onClick }: TeacherProps): JSX.Element => {
+export const Teacher = ({ data: courses }: TeacherProps): JSX.Element => {
   const { isOpen, onClose, onOpen } = useDisclosure()
+  const { searchFor: searchForCourseCodes } = useSearch()
+  const [searchedTerm, setSearchedTerm] = useState<string>('')
+  const history = useHistory()
+
+  useEffect(() => {
+    setSearchedTerm('')
+  }, [isOpen])
+
+  const onCourseClick = (courseCode: string) =>
+    history.push(`${ROUTES.COURSE}/tutor/${courseCode}`)
 
   return (
     <>
@@ -19,12 +36,24 @@ export const Teacher = ({ data, onClick }: TeacherProps): JSX.Element => {
         </Box>
       </Tooltip>
       <ListDisplayModal
-        data={data}
-        title="Teachers"
+        title="Find a student"
         isOpen={isOpen}
         onClose={onClose}
-        onClick={onClick}
-      />
+      >
+        <>
+          <Input
+            onChange={(event) => setSearchedTerm(event.target.value)}
+            placeholder="Enter your course code"
+          />
+          <CourseTable
+            onCourseRowClick={onCourseClick}
+            data={findMatchedCourses(
+              searchForCourseCodes(searchedTerm),
+              courses,
+            )}
+          />
+        </>
+      </ListDisplayModal>
     </>
   )
 }
