@@ -13,7 +13,7 @@ export interface AuthToken {
 
 export interface VerificationDto {
   email: string
-  verificationKey: string
+  otp: string
 }
 
 export interface LoginDetails {
