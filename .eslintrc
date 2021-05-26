@@ -1,80 +1,86 @@
 {
-    "env": {
-      "commonjs": true,
-      "es6": true,
-      "node": true
-    },
-    "extends": ["eslint:recommended", "plugin:prettier/recommended"],
-    "globals": {
-      "Atomics": "readonly",
-      "SharedArrayBuffer": "readonly",
-      "_": true
-    },
-    "parserOptions": {
-      "ecmaVersion": 2018
-    },
-    "overrides": [
+  "env": {
+    "es6": true
+  },
+  "extends": [
+    "react-app",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "overrides": [
+    {
+      "files": ["*.test.ts"],
+      "extends": ["react-app/jest"]
+    }
+  ],
+  "plugins": ["import", "simple-import-sort"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "rules": {
+    // Rules for auto sort of imports
+    "simple-import-sort/imports": [
+      "error",
       {
-        "files": ["*.ts"],
-        "parser": "@typescript-eslint/parser",
-        "parserOptions": {
-          "sourceType": "module",
-          "ecmaFeatures": {
-            "modules": true
-          },
-          "project": "tsconfig.json"
-        },
-        "plugins": [
-          "@typescript-eslint",
-          "import",
-          "simple-import-sort",
-          "typesafe"
-        ],
-        "extends": ["plugin:@typescript-eslint/recommended"],
-        "rules": {
-          // Rules for auto sort of imports
-          "simple-import-sort/imports": [
-            "error",
-            {
-              "groups": [
-                // Side effect imports.
-                ["^\\u0000"],
-                // Packages.
-                // Things that start with a letter (or digit or underscore), or
-                // `@` followed by a letter.
-                ["^@?\\w"],
-                // Root imports
-                ["^(src)(/.*|$)"],
-                ["^(tests)(/.*|$)"],
-                // Parent imports. Put `..` last.
-                ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
-                // Other relative imports. Put same-folder imports and `.` last.
-                ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"]
-              ]
-            }
-          ],
-          "sort-imports": "off",
-          "import/order": "off",
-          "import/first": "error",
-          "import/newline-after-import": "error",
-          "import/no-duplicates": "error",
-          "@typescript-eslint/no-floating-promises": 2,
-          "@typescript-eslint/no-unused-vars": 2,
-          "typesafe/no-throw-sync-func": "error"
-        }
-      },
-      { "files": ["*.spec.ts"], "extends": ["plugin:jest/recommended"] },
-      {
-        "files": ["*.ts", "*.js"],
-        "excludedFiles": ["**/*.spec.ts", "**/.spec.js", "**/__tests__/**/*.ts"],
-        "rules": {
-          "@typescript-eslint/no-non-null-assertion": "error"
-        }
+        "groups": [
+          // Side effect imports.
+          ["^\\u0000"],
+
+          // Packages.
+          // Root imports
+          // Packages beginning with react
+          ["react"],
+
+          // Things that start with a letter (or digit or underscore), or
+          // `@` followed by a letter.
+          ["^@?\\w"],
+
+          // Shared imports should be separate from application imports.
+          ["^(@shared)(/.*|$)"],
+          ["^(src)(/.*|$)"],
+          ["^(tests)(/.*|$)"],
+          ["^(@assets)(/.*|$)"],
+          ["^(@typings)(/.*|$)"],
+          ["^(@components)(/.*|$)"],
+          ["^(@contexts)(/.*|$)"],
+          ["^(@constants)(/.*|$)"],
+          ["^(@hooks)(/.*|$)"],
+          ["^(@utils)(/.*|$)"],
+          ["^(@services)(/.*|$)"],
+          ["^(@pages)(/.*|$)"],
+          // Parent imports. Put `..` last.
+          ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+          // Other relative imports. Put same-folder imports and `.` last.
+          ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"]
+        ]
       }
     ],
-    "rules": {
-      "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-      "no-console": "warn"
-    }
+    "sort-imports": "off",
+    "import/order": "off",
+    "import/first": "error",
+    "import/newline-after-import": "error",
+    "import/no-duplicates": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { "argsIgnorePattern": "^_" }
+    ],
+    "no-unused-vars": [2, {"varsIgnorePattern": "^_"}],
+    "no-console": "warn",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/member-delimiter-style": [
+      "error",
+      {
+        "multiline": {
+          "delimiter": "none",
+          "requireLast": true
+        },
+        "singleline": {
+          "delimiter": "semi",
+          "requireLast": false
+        }
+      }
+    ]
   }
-  
+}

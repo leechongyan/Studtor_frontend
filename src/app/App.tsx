@@ -1,38 +1,29 @@
-import * as React from "react"
-import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
-} from "@chakra-ui/react"
-import { ColorModeSwitcher } from "../ColorModeSwitcher"
-import { Logo } from "../components/Logo"
+import { Box, ChakraProvider, Grid, theme } from '@chakra-ui/react'
+import * as React from 'react'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { BrowserRouter } from 'react-router-dom'
 
-export const App = () => (
-  <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link>
-        </VStack>
-      </Grid>
-    </Box>
-  </ChakraProvider>
+import { AuthProvider } from 'contexts/AuthContext'
+
+import { ColorModeSwitcher } from '../ColorModeSwitcher'
+
+import { AppRouter } from './AppRouter'
+
+const queryClient = new QueryClient()
+
+export const App = (): JSX.Element => (
+  <BrowserRouter>
+    <ChakraProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <Box textAlign="center" fontSize="xl">
+            <Grid minH="100vh" p={3}>
+              <ColorModeSwitcher justifySelf="flex-end" />
+              <AppRouter />
+            </Grid>
+          </Box>
+        </AuthProvider>
+      </QueryClientProvider>
+    </ChakraProvider>
+  </BrowserRouter>
 )
