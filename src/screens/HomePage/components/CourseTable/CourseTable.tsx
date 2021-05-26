@@ -49,10 +49,7 @@ export const CourseTable = ({
   onCourseRowClick,
 }: CourseProps): JSX.Element => {
   return (
-    <Table
-      sx={{ borderSpacing: '0 30px', borderCollapse: 'separate' }}
-      width="100%"
-    >
+    <Table sx={{ borderSpacing: '0 30px', borderCollapse: 'separate' }}>
       <Thead>
         <Tr>
           <Th>Course Code</Th>

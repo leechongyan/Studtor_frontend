@@ -7,8 +7,6 @@ import {
 import * as React from 'react'
 import { FaMoon, FaSun } from 'react-icons/fa'
 
-import Omit from 'typescript'
-
 type ColorModeSwitcherProps = Omit<IconButtonProps, 'aria-label'>
 
 export const ColorModeSwitcher: React.FC<ColorModeSwitcherProps> = (props) => {
