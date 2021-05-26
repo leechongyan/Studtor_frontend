@@ -1,10 +1,10 @@
 import React, { createContext, FC, useContext, useState } from 'react'
 import { useMutation } from 'react-query'
 
-import { ApiService } from 'services/ApiService'
+import * as AuthService from 'services/AuthService'
 import { JwtToken, SignupDto, User } from 'typings'
 
-import { TOKEN_KEY } from '../constants/localStorage'
+import { TOKEN_KEY, USER_KEY } from '../constants/localStorage'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { ErrorDto, LoginDetails } from '../typings'
 
@@ -32,18 +32,19 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined)
 export const useAuth = (): AuthContextProps => {
   const context = useContext(AuthContext)
   if (!context) {
-    throw new Error(`useAuth must be used within a ProvideAuth component`)
+    throw new Error(`useAuth must be used within a AuthProvider`)
   }
   return context
 }
 
 export const AuthProvider: FC = ({ children }) => {
   const [token, setToken] = useLocalStorage<JwtToken>(TOKEN_KEY)
-  const [email, setEmail] = useState<string>()
+  const [user, _setUser] = useLocalStorage<User>(USER_KEY)
+  const [email, setEmail] = useState<string>('')
 
   const { mutateAsync: sendOtp } = useMutation<string, ErrorDto, SignupDto>(
     (signupDetails) =>
-      ApiService.post<string>('/signup', signupDetails).then(({ data }) => {
+      AuthService.signUpUser(signupDetails).then((data) => {
         setEmail(signupDetails.email)
         return data
       }),
@@ -51,10 +52,7 @@ export const AuthProvider: FC = ({ children }) => {
 
   const { mutateAsync: verifyOtp } = useMutation<boolean, ErrorDto, string>(
     (otp) => {
-      return ApiService.post<boolean>('/verify', {
-        email,
-        verification_key: otp,
-      }).then(({ data }) => data)
+      return AuthService.verifyOtp({ otp, email })
     },
   )
 
@@ -62,27 +60,23 @@ export const AuthProvider: FC = ({ children }) => {
     { token: JwtToken },
     ErrorDto,
     LoginDetails
-  >((loginDetails) => {
-    setEmail(loginDetails.email)
-    return ApiService.post<{ token: JwtToken }>('/login', loginDetails).then(
-      ({ data }) => {
-        setToken(data.token)
-        return data
-      },
-    )
-  })
+  >((loginDetails) =>
+    AuthService.loginUser(loginDetails).then((data) => {
+      setToken(data.token)
+      return data
+    }),
+  )
 
-  // TODO: ping backend
-  const logout = () => {
-    setToken('')
-  }
+  const { mutateAsync: logout } = useMutation<unknown, unknown, void>(() =>
+    AuthService.logoutUser().then(() => setToken(undefined)),
+  )
 
   return (
     <AuthContext.Provider
       value={{
         sendOtp,
         isLoggedIn: () => !!token,
-        user: email ? { email } : undefined,
+        user,
         expiresAt: EXPIRY,
         token,
         verifyOtp,
