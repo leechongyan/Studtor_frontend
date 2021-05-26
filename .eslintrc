@@ -69,7 +69,6 @@
       "warn",
       { "argsIgnorePattern": "^_" }
     ],
-    "no-unused-vars": [2, {"varsIgnorePattern": "^_"}],
     "no-console": "warn",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/member-delimiter-style": [
